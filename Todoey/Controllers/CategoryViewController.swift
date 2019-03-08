@@ -12,18 +12,16 @@ import ChameleonFramework
 
 class CategoryViewController: SwipeTableViewController {
 
+    //DDatabase
     let realm = try! Realm()
     
-    // Auto updating realm container
+    // Auto updating realm container of Category Class
     var categoryArray: Results<Category>?
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
         loadCategories()
-        
         tableView.separatorStyle = .none
-
     }
 
 
@@ -36,14 +34,15 @@ class CategoryViewController: SwipeTableViewController {
     
     // Each row displays
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        
+        //Get swipeable cell from superclass
         let cell = super.tableView(tableView, cellForRowAt: indexPath)
         
+        //Set text of cell for that category
         if let category = categoryArray?[indexPath.row]{
             cell.textLabel?.text = category.name
             
+            //Set cell/text color for category
             guard let categoryColor = UIColor(hexString: category.color) else {fatalError()}
-            
             cell.backgroundColor = categoryColor
             cell.textLabel?.textColor = ContrastColorOf(categoryColor, returnFlat: true)
         }
@@ -76,7 +75,7 @@ class CategoryViewController: SwipeTableViewController {
     //MARK: - Delete Data From Swipe
     
     override func updateModel(at indexPath: IndexPath) {
-        
+        //Delete category at swiped indexpath.row
         if let toDelete = self.categoryArray?[indexPath.row]{
             do {
                 try self.realm.write {
